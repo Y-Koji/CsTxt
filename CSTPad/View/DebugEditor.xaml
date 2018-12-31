@@ -60,7 +60,11 @@
                     <ColumnDefinition />
                     <ColumnDefinition />
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                    <TextBlock Text="   " />
+                    <TextBlock Text="{Binding Text.Length, ElementName=Result}" Foreground="#EEE" />
+                    <TextBlock Text=" 文字" Foreground="#EEE" />
+                </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                     <TextBlock Text="{Binding NowTime}" Foreground="#EEE" FontSize="16" />
                     <TextBlock Text="    " />

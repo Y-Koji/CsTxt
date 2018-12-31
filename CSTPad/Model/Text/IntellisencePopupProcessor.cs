@@ -94,7 +94,7 @@ namespace CSTPad.Model.Text
             var word = GetCaretWord(text, caret).ToLower();
             var snipetKeys = GetSnipetKeys(word);
 
-            bool isCursor = e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Up || e.Key == Key.Down;
+            bool isCursor = e.Key == Key.Left || e.Key == Key.Right;
             bool isBlock = ScriptIndentAnalyze(text, caret).isScriptBlock;
             if (isBlock && !isCursor)
             {

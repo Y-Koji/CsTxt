@@ -59,44 +59,26 @@ namespace CSTPad.Model.Text
         private void RemoveOneLineTab(string text, int caret)
         {
             // Shift + Tab: 1段階インデント解除
-            int start = 0;
-            int end = 0;
-
             if (caret == 0)
             {
                 return;
             }
 
-            for (start = caret; 0 < start && text[start - 1] != '\n'; start--) ;
-            for (end = caret; end < text.Length - 1 && text[end + 1] != '\n'; end++) ;
-
-            string line = text.Substring(start, end - start);
-            string newText = string.Empty;
-            if (text[caret - 1] == ' ')
+            (int start, int end, string line) = GetCaretLineInfo(text, caret);
+            
+            string newLine = string.Empty;
+            if (char.IsWhiteSpace(text[caret - 1]))
             {
-                var linecaret = caret - start;
-                var spaceCount = 0;
-                for (spaceCount = 0; spaceCount < INDENT.Length; spaceCount++)
-                {
-                    var index = linecaret - spaceCount - 1;
-                    if (index >= 0 && line[index] == ' ')
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                newText = line.Remove(linecaret - spaceCount, spaceCount);
+                var spaceCount = line.Count(char.IsWhiteSpace);
+                newLine = 4 <= spaceCount ? line.Remove(0, 4) : line.Remove(0, spaceCount);
             }
             else
             {
-                newText = Regex.Replace(line, "^ {0,4}", string.Empty, RegexOptions.None);
+                newLine = Regex.Replace(line, "^ {0,4}", string.Empty, RegexOptions.None);
             }
 
-            AssociatedObject.Text = text.Substring(0, start) + newText + text.Substring(end);
-            AssociatedObject.CaretIndex = caret - (line.Length - newText.Length);
+            AssociatedObject.Text = text.Substring(0, start) + newLine + text.Substring(end);
+            AssociatedObject.CaretIndex = caret - (line.Length - newLine.Length);
         }
 
         private void InsertMultiLineTab(string text, int caret)

@@ -11,17 +11,10 @@ namespace CSTPad.Model.Text
     /// <summary>スクリプト内でのインデント管理</summary>
     public class ScriptIndentProcessor : TextBoxProcessorBase
     {
-        protected bool ShouldInsertBracket(string text,int indent)
+        protected bool IsShouldInsertBracket(string text,int indent)
         {
             // end of block count
-            int eobCount = 0;
-            foreach (var chr in text)
-            {
-                if (chr == '}')
-                {
-                    eobCount++;
-                }
-            }
+            int eobCount = text.Count(x => '}' == x);
 
             if (eobCount == indent)
             {
@@ -32,6 +25,7 @@ namespace CSTPad.Model.Text
                 return true;
             }
         }
+
         protected override void OnKeyDown(string text, char key, int caret, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
@@ -50,14 +44,15 @@ namespace CSTPad.Model.Text
                     AssociatedObject.CaretIndex = caret + "\r\n".Length + space.Length;
 
                     // ブラケット追加
-                    if (ShouldInsertBracket(text, indent) == true && text[caret - 1] == '{')
+                    if (IsShouldInsertBracket(text, indent) && '{' == text[caret - 1])
                     {
-                        string endspace = string.Empty;
-                        if (indent != 1)
-                        {
-                            endspace = GetIndent(indent - 1);
-                        }
-                        AssociatedObject.Text = text.Substring(0, caret) + "\r\n" + space + "\r\n" + endspace + "}" + text.Substring(caret);
+                        string endspace = 1 != indent ? GetIndent(indent - 1) : string.Empty;
+
+                        AssociatedObject.Text = 
+                            text.Substring(0, caret) + "\r\n" +
+                            space + "\r\n" +
+                            endspace + "}" + text.Substring(caret);
+
                         AssociatedObject.CaretIndex = caret + "\r\n".Length + space.Length;
                     }
                 }

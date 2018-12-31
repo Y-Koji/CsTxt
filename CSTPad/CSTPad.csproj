@@ -216,6 +216,8 @@
     <Compile Include="Model\IntellisencePopupBehavior.cs" />
     <Compile Include="Model\Intellisence\Snipet.cs" />
     <Compile Include="Model\KeyConverter.cs" />
+    <Compile Include="Model\TextHistory.cs" />
+    <Compile Include="Model\Text\HistoryProcessor.cs" />
     <Compile Include="Model\Text\IntellisencePopupProcessor.cs" />
     <Compile Include="Model\Text\ScriptIndentProcessor.cs" />
     <Compile Include="Model\Text\TabToIndentProcessor.cs" />

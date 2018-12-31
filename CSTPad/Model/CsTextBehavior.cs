@@ -19,6 +19,7 @@ namespace CSTPad.Model
         private TextBoxProcessorBase TabToIndent { get; } = new TabToIndentProcessor();
         private TextBoxProcessorBase ScriptIndent { get; } = new ScriptIndentProcessor();
         private IntellisencePopupProcessor Intellisence { get; } = new IntellisencePopupProcessor();
+        private TextBoxProcessorBase History { get; } = new HistoryProcessor();
         
         public ICommand FocusCommand
         {
@@ -47,6 +48,7 @@ namespace CSTPad.Model
             Intellisence.Registor(AssociatedObject);
             TabToIndent.Registor(AssociatedObject);
             ScriptIndent.Registor(AssociatedObject);
+            History.Registor(AssociatedObject);
 
             AssociatedObject.KeyDown += (sender, e) =>
             {

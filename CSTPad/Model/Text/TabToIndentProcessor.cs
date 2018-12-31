@@ -66,19 +66,11 @@ namespace CSTPad.Model.Text
 
             (int start, int end, string line) = GetCaretLineInfo(text, caret);
             
-            string newLine = string.Empty;
-            if (char.IsWhiteSpace(text[caret - 1]))
-            {
-                var spaceCount = line.Count(char.IsWhiteSpace);
-                newLine = 4 <= spaceCount ? line.Remove(0, 4) : line.Remove(0, spaceCount);
-            }
-            else
-            {
-                newLine = Regex.Replace(line, "^ {0,4}", string.Empty, RegexOptions.None);
-            }
+            string newLine = Regex.Replace(line, "^ {0,4}", string.Empty, RegexOptions.None);
+            int newCaret = caret - (line.Length - newLine.Length);
 
             AssociatedObject.Text = text.Substring(0, start) + newLine + text.Substring(end);
-            AssociatedObject.CaretIndex = caret - (line.Length - newLine.Length);
+            AssociatedObject.CaretIndex = newCaret < start ? start : newCaret;
         }
 
         private void InsertMultiLineTab(string text, int caret)

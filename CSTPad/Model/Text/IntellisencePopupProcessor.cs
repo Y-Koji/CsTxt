@@ -21,7 +21,7 @@ namespace CSTPad.Model.Text
         {
             if (!string.IsNullOrWhiteSpace(word))
             {
-                word = Regex.Escape(word);
+                word = string.Join(".*", Regex.Escape(word).ToCharArray());
 
                 foreach (var snipet in Snipet.SnipetDictionary)
                 {

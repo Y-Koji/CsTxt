@@ -1,5 +1,6 @@
 ﻿using CSTPad.Model.Intellisence;
 using CSTPad.ViewModel;
+using CsTxt.Block;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,7 +22,21 @@ namespace CSTPad.Model.Text
         {
             if (!string.IsNullOrWhiteSpace(word))
             {
-                word = string.Join(".*", Regex.Escape(word).ToCharArray());
+                word = Regex.Escape(word);
+                StringBuilder sb = new StringBuilder();
+                foreach (var ch in word)
+                {
+                    if (Regex.IsMatch(ch.ToString(), "[a-zA-Z_]"))
+                    {
+                        sb.Append(ch).Append(".*");
+                    }
+                    else
+                    {
+                        sb.Append(ch);
+                    }
+                }
+
+                word = sb.ToString();
 
                 foreach (var snipet in Snipet.SnipetDictionary)
                 {
@@ -39,7 +54,7 @@ namespace CSTPad.Model.Text
             {
                 string word = GetCaretWord(text, caret).ToLower();
                 string snipetKey = GetSnipetKeys(word).FirstOrDefault();
-                
+
                 if (!string.IsNullOrWhiteSpace(snipetKey))
                 {
                     Items.Clear();
@@ -58,6 +73,17 @@ namespace CSTPad.Model.Text
 
                     e.Handled = true;
                 }
+                else
+                {
+                    if (null != Items && 0 < Items.Count)
+                    {
+                        string item = (Items.FirstOrDefault() ?? string.Empty);
+                        AssociatedObject.Text = text.Substring(0, caret - word.Length) + item + text.Substring(caret);
+                        AssociatedObject.CaretIndex = caret - word.Length + item.Length;
+
+                        e.Handled = true;
+                    }
+                }
             }
         }
 
@@ -67,6 +93,18 @@ namespace CSTPad.Model.Text
 
             var word = GetCaretWord(text, caret).ToLower();
             var snipetKeys = GetSnipetKeys(word);
+
+            bool isCursor = e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Up || e.Key == Key.Down;
+            bool isBlock = ScriptIndentAnalyze(text, caret).isScriptBlock;
+            if (isBlock && !isCursor)
+            {
+                var blocks = CsTxt.Block.BlockFactory.Parse(text);
+                var usings = blocks.OfType<UsingBlock>().Select(x => x.GetNamespace()).ToArray();
+                foreach (var name in DotNet.GetTypes(usings, word))
+                {
+                    Items.Add(name);
+                }
+            }
 
             foreach (var snipetKey in snipetKeys)
             {

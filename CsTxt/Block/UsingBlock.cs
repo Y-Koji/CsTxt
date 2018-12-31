@@ -34,5 +34,10 @@ namespace CsTxt.Block
         {
             return Content.TrimStart('@').Trim();
         }
+
+        public string GetNamespace()
+        {
+            return Content.Trim().TrimStart('@').TrimEnd(';').Replace("using ", string.Empty);
+        }
     }
 }

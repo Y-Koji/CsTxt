@@ -214,6 +214,7 @@
     <Compile Include="Model\CSharpResultConverter.cs" />
     <Compile Include="Model\CsTextBehavior.cs" />
     <Compile Include="Model\IntellisencePopupBehavior.cs" />
+    <Compile Include="Model\Intellisence\DotNet.cs" />
     <Compile Include="Model\Intellisence\Snipet.cs" />
     <Compile Include="Model\KeyConverter.cs" />
     <Compile Include="Model\TextHistory.cs" />

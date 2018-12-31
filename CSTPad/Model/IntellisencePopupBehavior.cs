@@ -65,25 +65,37 @@ namespace CSTPad.Model
                 if (e.Key == Key.Enter)
                 {
                     string key = listBox.SelectedValue.ToString();
-                    string value = Snipet.SnipetDictionary[key];
-                    string word = TextBoxProcessorBase.GetCaretWord(TextBox.Text, TextBox.CaretIndex);
-
-                    int caretIndex = 0;
-                    if (value.Contains("{caret}"))
+                    if (Snipet.SnipetDictionary.ContainsKey(key))
                     {
-                        caretIndex = value.IndexOf("{caret}");
-                        value = value.Replace("{caret}", string.Empty);
-                    }
+                        string value = Snipet.SnipetDictionary[key];
+                        string word = TextBoxProcessorBase.GetCaretWord(TextBox.Text, TextBox.CaretIndex);
 
-                    int caret = TextBox.CaretIndex;
-                    TextBox.Text = TextBox.Text.Remove(caret - word.Length, word.Length).Insert(caret - word.Length, value);
-                    if (0 == caretIndex)
-                    {
-                        TextBox.CaretIndex = caret - word.Length + value.Length;
+                        int caretIndex = 0;
+                        if (value.Contains("{caret}"))
+                        {
+                            caretIndex = value.IndexOf("{caret}");
+                            value = value.Replace("{caret}", string.Empty);
+                        }
+
+                        int caret = TextBox.CaretIndex;
+                        TextBox.Text = TextBox.Text.Remove(caret - word.Length, word.Length).Insert(caret - word.Length, value);
+                        if (0 == caretIndex)
+                        {
+                            TextBox.CaretIndex = caret - word.Length + value.Length;
+                        }
+                        else
+                        {
+                            TextBox.CaretIndex = caret - word.Length + caretIndex;
+                        }
                     }
                     else
                     {
-                        TextBox.CaretIndex = caret - word.Length + caretIndex;
+                        string text = TextBox.Text;
+                        int caret = TextBox.CaretIndex;
+                        string word = TextBoxProcessorBase.GetCaretWord(TextBox.Text, TextBox.CaretIndex);
+
+                        TextBox.Text = text.Substring(0, caret - word.Length) + key + text.Substring(caret);
+                        TextBox.CaretIndex = caret - word.Length + key.Length;
                     }
 
                     AssociatedObject.IsOpen = false;

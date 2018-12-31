@@ -14,8 +14,9 @@ namespace CSTPad.Model.Text
         protected override void OnKeyDown(string text, char key, int caret, KeyEventArgs e)
         {
             bool isCtrlKeyDown = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            bool isCursorKey = e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Up || e.Key == Key.Down;
 
-            if (!isCtrlKeyDown)
+            if (!isCtrlKeyDown && !isCursorKey)
             {
                 History.Push(caret, text);
             }
@@ -43,8 +44,9 @@ namespace CSTPad.Model.Text
         protected override void OnKeyUp(string text, char key, int caret, KeyEventArgs e)
         {
             bool isCtrlKeyDown = Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl);
+            bool isCursorKey = e.Key == Key.Left || e.Key == Key.Right || e.Key == Key.Up || e.Key == Key.Down;
 
-            if (!isCtrlKeyDown)
+            if (!isCtrlKeyDown && !isCursorKey)
             {
                 History.Push(caret, text);
             }

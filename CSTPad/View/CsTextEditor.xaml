@@ -18,12 +18,27 @@
             <RowDefinition />
         </Grid.RowDefinitions>
         <Grid Grid.Row="0" Background="#3CF">
-            <TextBlock
-                Text="CSharp Text" 
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Foreground="#EEE"
-                FontSize="15"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="60" />
+                <ColumnDefinition Width="60" />
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <TextBlock
+                    Text="CSharp Text" 
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Foreground="#EEE"
+                    FontSize="15"/>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Button Content="開く"
+                        Command="{Binding OpenCommand}" />
+            </Grid>
+            <Grid Grid.Column="2">
+                <Button Content="保存"
+                        Command="{Binding SaveCommand}" />
+            </Grid>
         </Grid>
         <Grid Grid.Row="1">
             <TextBox Name="TextBox" Text="{Binding Text, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:CsTextEditor}},UpdateSourceTrigger=PropertyChanged}" 

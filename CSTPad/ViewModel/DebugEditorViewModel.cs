@@ -1,7 +1,9 @@
 ﻿using CsTxt;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +25,8 @@ namespace CSTPad.ViewModel
         public virtual string CsText { get; set; } = string.Empty;
 
         public virtual string CSharp { get; set; } = string.Empty;
+
+        public virtual string FilePath { get; set; } = string.Empty;
 
         public virtual string ResultText { get; set; } = string.Empty;
 
@@ -64,6 +68,38 @@ namespace CSTPad.ViewModel
 
             CSharp = ResultText = "<初期化中...>";
             CSharpConvertionBlock.Post(string.Empty);
+        });
+
+        public ICommand OpenCommand => new ActionCommand(parameter =>
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.Filter = "CSText File(*.cst)|*.cst";
+
+            if (ofd.ShowDialog() ?? false)
+            {
+                FilePath = ofd.FileName;
+
+                CsText = File.ReadAllText(FilePath);
+            }
+        });
+
+        public ICommand SaveCommand => new ActionCommand(parameter =>
+        {
+            if (string.IsNullOrWhiteSpace(FilePath))
+            {
+                SaveFileDialog sfd = new SaveFileDialog();
+                sfd.Filter = "CSText File(*.cst)|*.cst";
+                if (sfd.ShowDialog() ?? false)
+                {
+                    FilePath = sfd.FileName;
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            File.WriteAllText(FilePath, CsText);
         });
     }
 }

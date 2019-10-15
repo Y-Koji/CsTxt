@@ -68,6 +68,14 @@ namespace CSTPad.ViewModel
 
             CSharp = ResultText = "<初期化中...>";
             CSharpConvertionBlock.Post(string.Empty);
+
+            // 引数で渡されたファイルを開く
+            string[] args = Environment.GetCommandLineArgs();
+            if (args.Length == 2 && File.Exists(args[1]) && Path.GetExtension(args[1]).ToLower() == ".cst")
+            {
+                CsText = File.ReadAllText(args[1]);
+                FilePath = args[1];
+            }
         });
 
         public ICommand OpenCommand => new ActionCommand(parameter =>

@@ -102,7 +102,7 @@ namespace CSTPad.Model.Text
                 var usings = blocks.OfType<UsingBlock>().Select(x => x.GetNamespace()).ToArray();
                 foreach (var name in DotNet.GetTypes(usings, word))
                 {
-                    Items.Add(name);
+                    Items?.Add(name);
                 }
             }
 
@@ -110,7 +110,7 @@ namespace CSTPad.Model.Text
             {
                 if (!string.IsNullOrWhiteSpace(snipetKey))
                 {
-                    Items.Add(snipetKey);
+                    Items?.Add(snipetKey);
                 }
             }
             
